@@ -12,7 +12,7 @@ This setup creates the following resources:
 - One public and one private subnet per AZ
 - Routing tables for the subnets
 - Internet Gateway for public subnets
-- NAT gateways with attached Elastic IPs for the prive subnet
+- NAT gateways with attached Elastic IPs for the private subnet
 - Two security groups
   - one that allows HTTP/HTTPS access
   - one that allows access to the specified container port
@@ -28,8 +28,8 @@ This setup creates the following resources:
 ### Get Started building your own infrastructure
 
 - Install terraform on MacOS with `brew install terraform`
-- create your own `secrets.tfvars` based on `secrets.example.tfvars`, insert the values for your AWS access key and secrets. If you don't create your `secrets.tfvars`, don't worry. Terraform will interactively prompt you for missing variables later on. You can also create your `environment.tfvars` file to manage non-secret values for different environemnts or projects with the same infrastructure
-- execute `terraform init`, it will initialise your local terraform and connect it to the state store, and it will download all the necessary providers
+- create your own `secrets.tfvars` based on `secrets.example.tfvars`, insert the values for your AWS access key and secrets. If you don't create your `secrets.tfvars`, don't worry. Terraform will interactively prompt you for missing variables later on. You can also create your `environment.tfvars` file to manage non-secret values for different environments or projects with the same infrastructure
+- execute `terraform init`, it will initialize your local terraform and connect it to the state store, and it will download all the necessary providers
 - execute `terraform plan -var-file="secret.tfvars" -var-file="environment.tfvars" -out="out.plan"` - this will calculate the changes terraform has to apply and creates a plan. If there are changes, you will see them. Check if any of the changes are expected, especially deletion of infrastructure.
 - if everything looks good, you can execute the changes with `terraform apply out.plan`
 
@@ -71,8 +71,8 @@ Here is a guideline:
 
 1. Enable versioning in bucket with `aws s3api put-bucket-versioning --bucket terraform-remote-store --versioning-configuration Status=Enabled`
 1. create the AWS access keys for your deployment user with `aws iam create-access-key --user-name my-terraform-user`, this will output access key and secret, which can be used as credentials for executing Terraform against AWS - i.e. you can put the values into the `secrets.tfvars` file
-1. execute intial terraforming
-1. after initial terraforming, the state lock dynamo DB table is created and can be used for all subsequent executions. Therefore, this line in `main.tf` can be uncommented:
+1. execute initial terraforming
+1. after initial terraforming, the state lock dynamo DB table is created and can be used for all subsequent executions. Therefore, this line in `main.tf` can be un-commented:
 
 ```hcl
     # dynamodb_table = "terraform-state-lock-dynamo" - uncomment this line once the terraform-state-lock-dynamo has been terraformed
