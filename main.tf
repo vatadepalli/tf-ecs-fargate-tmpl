@@ -66,14 +66,14 @@ module "ecr" {
 
 
 module "secrets" {
-  source              = "./modules/secrets"
+  source              = "./secrets"
   name                = var.name
   environment         = var.environment
   application-secrets = var.application-secrets
 }
 
 module "ecs" {
-  source                      = "./modules/ecs"
+  source                      = "./ecs"
   name                        = var.name
   environment                 = var.environment
   region                      = var.aws-region
